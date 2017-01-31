@@ -24,6 +24,7 @@
 - Many of the fields, at the moment, have no impact in Unity itself.
 - Should work with Unity 5.6 and up.
 - Work in progress.
+- For the Physical-Camera to synch with a camera, it's needs to be explicitely linked throught it's "Associated Camera" property. This property is auto-set, when not set, to the first camera object that it find on it's parent game object.
 
 <img src="Documents/description.png">  
 
