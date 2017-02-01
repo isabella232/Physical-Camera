@@ -10,7 +10,7 @@ namespace Unity.Vfx.Cameras
 		Controller,
 		Slave
 	}
-
+	[AddComponentMenu("Camera/Physical Camera")]
 	[ExecuteInEditMode]
 	public class PhysicalCamera : MonoBehaviour
 	{
