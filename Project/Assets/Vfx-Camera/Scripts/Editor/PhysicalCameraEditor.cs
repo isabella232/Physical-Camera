@@ -25,10 +25,10 @@ namespace Unity.Vfx.Cameras.Editor
 
 			// Start --------------------------------------------------------
 			var camObj = serializedObject.targetObject as PhysicalCamera;
-			var property = this.serializedObject.FindProperty(GetName(() => camObj.m_Mode));
-			AddEnumPopup(property, "Mode", "Determines is the Physical Camera controls the attached camera or reads from it.", typeof(PhysicalCameraMode));
+			var property = this.serializedObject.FindProperty(() => camObj.m_Mode);
+			AddEnumPopup(property, "Mode", "Determines if the Physical Camera controls the attached camera or reads from it.", typeof(PhysicalCameraMode));
 
-			property = this.serializedObject.FindProperty( GetName( ()=>camObj.m_AssociatedCameraObj) );
+			property = this.serializedObject.FindProperty( ()=>camObj.m_AssociatedCameraObj );
 			EditorGUILayout.PropertyField(property);
 
 			// models
@@ -65,8 +65,8 @@ namespace Unity.Vfx.Cameras.Editor
 
 			// Projection / stereo
 			{
-				var projProp = camModel.FindPropertyRelative(GetName(() => camModelObj.m_ProjectionMode));
-				var stereoProp = camModel.FindPropertyRelative(GetName(() => camModelObj.m_StereoScopic));
+				var projProp = camModel.FindPropertyRelative( () => camModelObj.m_ProjectionMode);
+				var stereoProp = camModel.FindPropertyRelative(() => camModelObj.m_StereoScopic);
 
 				Rect ourRect = EditorGUILayout.BeginHorizontal();
 				EditorGUI.BeginProperty(ourRect, GUIContent.none, projProp);
@@ -106,7 +106,7 @@ namespace Unity.Vfx.Cameras.Editor
 				if (orgValue != newValue)
 				{
 					var lens = camModelObj.Lens;
-					var flenProp = lensModel.FindPropertyRelative(GetName(() => lens.m_FocalLength));
+					var flenProp = lensModel.FindPropertyRelative( () => lens.m_FocalLength);
 					camObj.Model.VerticalFOV = newValue;
 					flenProp.floatValue = lens.m_FocalLength;
 				}
@@ -114,27 +114,27 @@ namespace Unity.Vfx.Cameras.Editor
 				EditorGUILayout.EndHorizontal();
 			}
 
-			var property = camModel.FindPropertyRelative(GetName(() => camModelObj.m_NearClippingPlane ));
+			var property = camModel.FindPropertyRelative( () => camModelObj.m_NearClippingPlane );
 			AddFloatProperty(property, "Near clipping plane", "Distance, from camera sensor, to the Near clipping plane.", (oldv, newv) =>
 			{
 				if (newv < 0.01f) newv = 0.01f;
-				var far = camModel.FindPropertyRelative(GetName(() => camModelObj.m_FarClippingPlane));
+				var far = camModel.FindPropertyRelative( () => camModelObj.m_FarClippingPlane );
 				if (far.floatValue - 0.01f < newv)
 					far.floatValue = newv + 0.01f;
 				return newv;
 			});
 
-			property = camModel.FindPropertyRelative( GetName(() => camModelObj.m_FarClippingPlane) );
+			property = camModel.FindPropertyRelative( () => camModelObj.m_FarClippingPlane );
 			AddFloatProperty(property, "Far clipping plane", "Distance, from camera sensor, to the Far clipping plane.", (oldv, newv) => {
 				if (newv < camModelObj.m_NearClippingPlane  +0.01f) return camModelObj.m_NearClippingPlane + 0.01f;
 				else return newv;
 			});
 
-			property = camModel.FindPropertyRelative(GetName(() => camModelObj.m_AutoFocus));
+			property = camModel.FindPropertyRelative( () => camModelObj.m_AutoFocus );
 			AddBoolProperty(property, "Autofocus", "Does the camera auto focus? [For future use]");
 
 			GUI.enabled = camObj.Model.Body.m_HDR;
-			property = camModel.FindPropertyRelative(GetName(() => camModelObj.m_Exposure));
+			property = camModel.FindPropertyRelative( () => camModelObj.m_Exposure );
 			AddFloatSlider( property, "Exposure", "Used for tonal mapping of HDR images. [For future use]", null, 1f, -10f, 10f);
 			GUI.enabled = true;
 		}
@@ -144,10 +144,10 @@ namespace Unity.Vfx.Cameras.Editor
 			var camObj = serializedObject.targetObject as PhysicalCamera;
 			var bodyModelObj = camObj.Model.Body;
 
-			var property = bodyModel.FindPropertyRelative( GetName(()=> bodyModelObj.m_SensorWidth));
+			var property = bodyModel.FindPropertyRelative( ()=> bodyModelObj.m_SensorWidth);
 			AddFloatProperty(property, "Sensor width", "Width, in millimeters, of the camera sensor.", (o, n) => n < 0.001f ? 0.001f : n > 0.1f ? 0.1f : n, 1000f);
 
-			property = bodyModel.FindPropertyRelative(GetName(() => bodyModelObj.m_SensorHeight));
+			property = bodyModel.FindPropertyRelative( () => bodyModelObj.m_SensorHeight );
 			AddFloatProperty(property, "Sensor height", "Height, in millimeters, of the camera sensor.", (o, n) => n < 0.001f ? 0.001f : n > 0.1f ? 0.1f : n, 1000f);
 
 			// Fake property: Aspect Ratio
@@ -165,24 +165,24 @@ namespace Unity.Vfx.Cameras.Editor
 				EditorGUILayout.EndHorizontal();
 			}
 
-			property = bodyModel.FindPropertyRelative(GetName(() => bodyModelObj.m_ShutterAngle));
-			AddIntSlider(property, "Shutter angle", "Defines the ‘shutter speed’, driving the postFX motion blur parameter. [For future use]", null, 15, 360);
+			property = bodyModel.FindPropertyRelative( () => bodyModelObj.m_ShutterAngle);
+			AddIntSlider(property, "Shutter angle", "Defines the ï¿½shutter speedï¿½, driving the postFX motion blur parameter. [For future use]", null, 15, 360);
 
-			property = bodyModel.FindPropertyRelative(GetName(() => bodyModelObj.m_ISO));
+			property = bodyModel.FindPropertyRelative( () => bodyModelObj.m_ISO);
 			AddIntProperty(property, "ISO", "A measure of the sensitivity of the image sensor. [For future use]", (o, n) => n < 25 ? 25 : n > 25600 ? 25600 : n);
 
-			property = bodyModel.FindPropertyRelative(GetName(() => bodyModelObj.m_HDR));
+			property = bodyModel.FindPropertyRelative( () => bodyModelObj.m_HDR);
 			AddBoolProperty(property, "HDR", "Toggles extended dynamic range of generated images.");
 
-			property = bodyModel.FindPropertyRelative(GetName(() => bodyModelObj.m_LensShiftX));
+			property = bodyModel.FindPropertyRelative( () => bodyModelObj.m_LensShiftX);
 			AddFloatSlider(property, "Lens Shift X", "A displacement of the render frustum parallel to the image plane. Useful for perspective control architectural rendering. [For future use]", null, 1f, -1f, 1f);
 
-			property = bodyModel.FindPropertyRelative(GetName(() => bodyModelObj.m_LensShiftY));
+			property = bodyModel.FindPropertyRelative( () => bodyModelObj.m_LensShiftY );
 			AddFloatSlider(property, "Lens Shift Y", "A displacement of the render frustum parallel to the image plane.  Useful for perspective control architectural rendering. [For future use]", null, 1f, -1f, 1f);
 
 			GUI.enabled = camObj.Model.m_ProjectionMode < EProjectionMode.Ortographic;
 			{
-				property = bodyModel.FindPropertyRelative(GetName(() => bodyModelObj.m_PerspectiveCorrection));
+				property = bodyModel.FindPropertyRelative( () => bodyModelObj.m_PerspectiveCorrection);
 				AddFloatSlider(property, "Perspective Correction", "This rotates the render frustum on the x-axis to compensate for perpective distortion. [For future use]", null, 1f, -1f, 1f);
 			}
 			GUI.enabled = true;
@@ -196,7 +196,7 @@ namespace Unity.Vfx.Cameras.Editor
 
 			GUI.enabled = camObj.Model.m_ProjectionMode == EProjectionMode.Perspective;
 
-			var property = lensModel.FindPropertyRelative( GetName(()=> lensModelObj.m_FocalLength));
+			var property = lensModel.FindPropertyRelative( ()=> lensModelObj.m_FocalLength);
 			AddFloatProperty(property, "Focal length", "Focal length of the lens in millimeters.", (o, n) =>
 			{
 				if (n < 0.001f) n = 0.001f;
@@ -205,7 +205,7 @@ namespace Unity.Vfx.Cameras.Editor
 
 			GUI.enabled = true;
 
-			property = lensModel.FindPropertyRelative(GetName(() => lensModelObj.m_FStop));
+			property = lensModel.FindPropertyRelative( () => lensModelObj.m_FStop );
 			AddFloatSlider(property, "f-Stop", "Ratio of the lens's focal length to the diameter of the lens's entrance pupil. [For future use]", null, 1f, 0.7f, 64f);
 
 			DrawOctaneModel(lensModel);
@@ -226,35 +226,22 @@ namespace Unity.Vfx.Cameras.Editor
 				return;
 			}
 
-			var property = lensModel.FindPropertyRelative(GetName(() => lensModelObj.m_FocalDepth));
+			var property = lensModel.FindPropertyRelative(() => lensModelObj.m_FocalDepth);
 			AddFloatProperty(property, "Focal depth", "See Octane documentation.");
 
-			property = lensModel.FindPropertyRelative(GetName(() => lensModelObj.m_Aperture));
+			property = lensModel.FindPropertyRelative(() => lensModelObj.m_Aperture);
 			AddFloatProperty(property, "Aperture", "See Octane documentation.");
 
-			property = lensModel.FindPropertyRelative(GetName(() => lensModelObj.m_ApertureAspectRatio));
+			property = lensModel.FindPropertyRelative(() => lensModelObj.m_ApertureAspectRatio);
 			AddFloatProperty(property, "Aperture aspect ratio", "See Octane documentation.");
 
-			property = lensModel.FindPropertyRelative(GetName(() => lensModelObj.m_ApertureEdge));
+			property = lensModel.FindPropertyRelative(() => lensModelObj.m_ApertureEdge);
 			AddFloatProperty(property, "Aperture edge", "See Octane documentation.");
 
-			property = lensModel.FindPropertyRelative(GetName(() => lensModelObj.m_Distortion));
+			property = lensModel.FindPropertyRelative(() => lensModelObj.m_Distortion);
 			AddFloatProperty(property, "Distortion", "See Octane documentation.");
 
 			EditorGUI.indentLevel--;
-		}
-
-		public static string GetName(Expression<Func<object>> exp)
-		{
-			MemberExpression body = exp.Body as MemberExpression;
-
-			if (body == null)
-			{
-				var ubody = (UnaryExpression)exp.Body;
-				body = ubody.Operand as MemberExpression;
-			}
-
-			return body.Member.Name;
 		}
 
 		private void DrawStereoModel(SerializedProperty stereoModel)
@@ -263,19 +250,19 @@ namespace Unity.Vfx.Cameras.Editor
 			var stereoModelObj = camObj.Model.Stereo;
 
 			GUI.enabled = camObj.Model.m_StereoScopic;
-			var property = stereoModel.FindPropertyRelative( GetName(()=> stereoModelObj.m_Mode));
+			var property = stereoModel.FindPropertyRelative( ()=> stereoModelObj.m_Mode);
 			AddEnumPopup(property, "Mode", "", typeof(EStereoscopicMode));
 
-			property = stereoModel.FindPropertyRelative(GetName(() => stereoModelObj.m_EyeDistance));
+			property = stereoModel.FindPropertyRelative( () => stereoModelObj.m_EyeDistance );
 			AddFloatSlider(property, "Eye Distance", "Distance seperating the eyes. [For future use]", null, 1, 0f, float.MaxValue);
 
-			property = stereoModel.FindPropertyRelative(GetName(() => stereoModelObj.m_SwapEyes));
+			property = stereoModel.FindPropertyRelative( () => stereoModelObj.m_SwapEyes );
 			AddBoolProperty(property, "Swap eyes", "[For future use]");
 
-			property = stereoModel.FindPropertyRelative(GetName(() => stereoModelObj.m_LeftFilter));
+			property = stereoModel.FindPropertyRelative( () => stereoModelObj.m_LeftFilter );
 			EditorGUILayout.PropertyField(property);
 
-			property = stereoModel.FindPropertyRelative(GetName(() => stereoModelObj.m_RightFilter));
+			property = stereoModel.FindPropertyRelative( () => stereoModelObj.m_RightFilter );
 			EditorGUILayout.PropertyField(property);
 
 			GUI.enabled = true;
