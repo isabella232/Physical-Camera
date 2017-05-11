@@ -10,6 +10,7 @@ namespace Unity.Vfx.Cameras
 		Controller,
 		Slave
 	}
+
 	[AddComponentMenu("Camera/Physical Camera")]
 	[ExecuteInEditMode]
 	public class PhysicalCamera : MonoBehaviour
@@ -29,7 +30,7 @@ namespace Unity.Vfx.Cameras
 		public Camera m_AssociatedCameraObj;
 
 
-		private void Update()
+		public void Update()
 		{
 			if (m_AssociatedCameraObj == null)
 			{
@@ -42,8 +43,8 @@ namespace Unity.Vfx.Cameras
 
 			if (m_Mode == PhysicalCameraMode.Controller)
 			{
-				if (m_AssociatedCameraObj.orthographic != (Model.m_ProjectionMode == EProjectionMode.Ortographic))
-					m_AssociatedCameraObj.orthographic = Model.m_ProjectionMode == EProjectionMode.Ortographic;
+				if (m_AssociatedCameraObj.orthographic != (Model.m_ProjectionMode == ProjectionMode.Orthographic))
+					m_AssociatedCameraObj.orthographic = Model.m_ProjectionMode == ProjectionMode.Orthographic;
 
 				if (m_AssociatedCameraObj.fieldOfView != Model.VerticalFOV)
 					m_AssociatedCameraObj.fieldOfView = Model.VerticalFOV;
@@ -53,17 +54,14 @@ namespace Unity.Vfx.Cameras
 
 				if (m_AssociatedCameraObj.farClipPlane != Model.m_FarClippingPlane)
 					m_AssociatedCameraObj.farClipPlane = Model.m_FarClippingPlane;
-
-				if (m_AssociatedCameraObj.hdr != Model.Body.m_HDR)
-					m_AssociatedCameraObj.hdr = Model.Body.m_HDR;
 			}
 			else
 			{
-				if (m_AssociatedCameraObj.orthographic != (Model.m_ProjectionMode == EProjectionMode.Ortographic))
+				if (m_AssociatedCameraObj.orthographic != (Model.m_ProjectionMode == ProjectionMode.Orthographic))
 				{
 					Model.m_ProjectionMode = m_AssociatedCameraObj.orthographic
-						? EProjectionMode.Ortographic
-						: EProjectionMode.Perspective;
+						? ProjectionMode.Orthographic
+						: ProjectionMode.Perspective;
 				}
 
 				if (m_AssociatedCameraObj.fieldOfView != Model.VerticalFOV)
@@ -74,10 +72,6 @@ namespace Unity.Vfx.Cameras
 
 				if (m_AssociatedCameraObj.farClipPlane != Model.m_FarClippingPlane)
 					Model.m_FarClippingPlane = m_AssociatedCameraObj.farClipPlane;
-
-				if (m_AssociatedCameraObj.hdr != Model.Body.m_HDR)
-					Model.Body.m_HDR = m_AssociatedCameraObj.hdr;
-
 			}
 		}
 	}

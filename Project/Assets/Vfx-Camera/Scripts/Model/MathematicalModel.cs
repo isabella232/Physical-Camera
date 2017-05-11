@@ -11,8 +11,6 @@ namespace Unity.Vfx.Cameras.Model
 	/// </summary>
 	public class MathematicalModel
 	{
-
-		#region Limits
 		public virtual float MaxVFOV { get { return 179f; } }
 		public virtual float MinVFOV { get { return 1f; } }
 
@@ -20,8 +18,6 @@ namespace Unity.Vfx.Cameras.Model
 		{
 			return camera.Body.m_SensorWidth/(ToRad(MaxVFOV)*camera.Lens.m_FocalLength);
 		}
-
-		#endregion
 
 		public float ClampVerticalFOV( float fov )
 		{
@@ -31,12 +27,12 @@ namespace Unity.Vfx.Cameras.Model
 
 		public virtual void ApplyVerticalFOV(float afov, PhysicalCameraModel camera)
 		{
-			camera.Lens.m_FocalLength = camera.Body.m_SensorHeight/ToRad(afov);
+			camera.Lens.m_FocalLength = camera.Body.m_SensorHeight / ToRad(afov);
 		}
 
 		public float VerticalFOV(PhysicalCameraModel camera )
 		{
-			return ToDeg(camera.Body.m_SensorHeight/ camera.Lens.m_FocalLength);
+			return ToDeg(camera.Body.m_SensorHeight / camera.Lens.m_FocalLength);
 		}
 
 		private float ToRad(float rads)
