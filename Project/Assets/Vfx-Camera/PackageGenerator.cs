@@ -1,16 +1,9 @@
-//#if UNITY_EDITOR
-using System;
-using System.Collections;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-using UnityEngine;
-using UnityEngine.Rendering;
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace Unity.Vfx.Cameras
 {
-
-	public class AlembicImporterPackaging
+	public class PhysicalCameraPackaging
 	{
 		[MenuItem("Assets/VFx/Cameras/Make Package")]
 		public static void MakePackage()
@@ -23,10 +16,10 @@ namespace Unity.Vfx.Cameras
 				"Assets/VFx-Camera/Scripts/Model/PhysicalCameraBodyModel.cs",
 				"Assets/VFx-Camera/Scripts/Model/PhysicalCameraLensModel.cs",
 				"Assets/VFx-Camera/Scripts/Model/PhysicalCameraModel.cs",
-				"Assets/VFx-Camera/Scripts/Model/StereoPhysicalCameraModel.cs",
 
 				"Assets/VFx-Camera/Scripts/Editor/PhysicalCameraEditor.cs",
 				"Assets/VFx-Camera/Scripts/Editor/SerializableObjHelper.cs",
+				"Assets/Vfx-Camera/Scripts/Editor/PhysicalCameraPostprocessor.cs",
 
 				"Assets/VFx-Camera/Cameras/Full Frame - 24mm (default).prefab"
 			};
@@ -34,5 +27,4 @@ namespace Unity.Vfx.Cameras
 		}
 	}
 }
-
-//#endif // UNITY_EDITOR
+#endif // UNITY_EDITOR
